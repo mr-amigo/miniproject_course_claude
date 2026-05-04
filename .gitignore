@@ -221,3 +221,6 @@ __marimo__/
 
 # Local prompt journal written by the UserPromptSubmit hook
 .claude/prompts.md
+
+# Local data file written by the todo CLI playground
+tasks.json
