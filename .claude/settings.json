@@ -1,11 +1,21 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p \"$CLAUDE_PROJECT_DIR/.claude\"; sid=$(jq -r '.session_id // \"unknown\"'); { echo; echo \"## Сесія: $(date '+%Y-%m-%d %H:%M:%S') <!-- session-id: $sid -->\"; echo; } >> \"$CLAUDE_PROJECT_DIR/.claude/prompts.md\" || true"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "mkdir -p \"$CLAUDE_PROJECT_DIR/.claude\"; prompt=$(jq -r '.prompt // empty'); [ -n \"$prompt\" ] && printf '[%s]\\n%s\\n\\n' \"$(date '+%Y-%m-%d %H:%M:%S')\" \"$prompt\" >> \"$CLAUDE_PROJECT_DIR/.claude/prompts.log\" || true"
+            "command": "prompt=$(jq -r '.prompt // empty'); [ -n \"$prompt\" ] && { echo \"### $(date '+%H:%M:%S')\"; echo; echo \"$prompt\" | sed 's/^/> /'; echo; } >> \"$CLAUDE_PROJECT_DIR/.claude/prompts.md\" || true"
           }
         ]
       }
@@ -15,7 +25,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "log=\"$CLAUDE_PROJECT_DIR/.claude/prompts.log\"; [ -f \"$log\" ] && jq -Rs --arg header 'Prompts from this session:' '{systemMessage: ($header + \"\\n\\n\" + .)}' < \"$log\" || true"
+            "command": "sid=$(jq -r '.session_id // empty'); log=\"$CLAUDE_PROJECT_DIR/.claude/prompts.md\"; [ -f \"$log\" ] && [ -n \"$sid\" ] && content=$(awk -v sid=\"$sid\" 'index($0, \"<!-- session-id: \" sid \" -->\") { found=1; sub(/ <!-- session-id:.*-->/, \"\") } found { print }' \"$log\") && [ -n \"$content\" ] && jq -Rs '{systemMessage: .}' <<< \"$content\" || true"
           }
         ]
       }

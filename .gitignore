@@ -219,5 +219,5 @@ __marimo__/
 
 .DS_Store
 
-# Local prompt log written by the UserPromptSubmit hook
-.claude/prompts.log
+# Local prompt journal written by the UserPromptSubmit hook
+.claude/prompts.md
