@@ -13,9 +13,14 @@ def cmd_add(args: argparse.Namespace) -> None:
     print(f"added #{task.id}: {task.title}")
 
 
+PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2}
+
+
 def cmd_list(args: argparse.Namespace) -> None:
     tasks = load()
     visible = tasks if args.all else [t for t in tasks if not t.done]
+    if args.sort == "priority":
+        visible = sorted(visible, key=lambda t: (PRIORITY_ORDER[t.priority], t.id))
     if not visible:
         print("no tasks")
         return
@@ -56,6 +61,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     lst = sub.add_parser("list", help="list tasks (open by default)")
     lst.add_argument("--all", action="store_true", help="include done tasks")
+    lst.add_argument(
+        "--sort",
+        choices=("priority", "date"),
+        default="priority",
+        help="priority (high-medium-low) | date (insertion order)",
+    )
     lst.set_defaults(func=cmd_list)
 
     done = sub.add_parser("done", help="mark task as done")
