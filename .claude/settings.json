@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p \"$CLAUDE_PROJECT_DIR/.claude\"; prompt=$(jq -r '.prompt // empty'); [ -n \"$prompt\" ] && printf '[%s]\\n%s\\n\\n' \"$(date '+%Y-%m-%d %H:%M:%S')\" \"$prompt\" >> \"$CLAUDE_PROJECT_DIR/.claude/prompts.log\" || true"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "log=\"$CLAUDE_PROJECT_DIR/.claude/prompts.log\"; [ -f \"$log\" ] && jq -Rs --arg header 'Prompts from this session:' '{systemMessage: ($header + \"\\n\\n\" + .)}' < \"$log\" || true"
+          }
+        ]
+      }
+    ]
+  }
+}
