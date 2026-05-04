@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from .models import Task
 from .storage import load, next_id, save
@@ -6,7 +7,7 @@ from .storage import load, next_id, save
 
 def cmd_add(args: argparse.Namespace) -> None:
     tasks = load()
-    task = Task(id=next_id(tasks), title=args.title)
+    task = Task(id=next_id(tasks), title=args.title, priority=args.priority)
     tasks.append(task)
     save(tasks)
     print(f"added #{task.id}: {task.title}")
@@ -20,7 +21,7 @@ def cmd_list(args: argparse.Namespace) -> None:
         return
     for t in visible:
         mark = "x" if t.done else " "
-        print(f"[{mark}] {t.id}: {t.title}")
+        print(f"[{mark}] {t.id} ({t.priority}): {t.title}")
 
 
 def cmd_done(args: argparse.Namespace) -> None:
@@ -50,6 +51,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     add = sub.add_parser("add", help="add a task")
     add.add_argument("title")
+    add.add_argument("--priority", default="medium", help="low | medium | high")
     add.set_defaults(func=cmd_add)
 
     lst = sub.add_parser("list", help="list tasks (open by default)")
@@ -70,4 +72,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
-    args.func(args)
+    try:
+        args.func(args)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        sys.exit(1)
