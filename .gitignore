@@ -219,9 +219,6 @@ __marimo__/
 
 .DS_Store
 
-# Local prompt journal written by the UserPromptSubmit hook
-.claude/prompts.md
-
 # Local edit log written by the PostToolUse hook
 .claude/edits.md
 
