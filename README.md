@@ -3,13 +3,16 @@
 Міні-проєкт №2 | ООП
 Пройдений курс: Claude Code in Action від claudecertifications.com
 
-## Що тут є
+## Стуктура | Файли
 
 `CLAUDE.md` згенерований командою `/init` файл з контекстом проєкту для Claude Code, щоб модель краще орієнтувалась у репо.
 
 `CERTIFICATE.pdf` підтвердження проходження курсу, пройдено фінальний квіз.
 
 `analyze.py` Python-скрипт, який демонструє роботу з Claude Code SDK. Через subprocess викликає команду `claude -p` (print mode без інтерактиву) з промптом проаналізувати код у папці `todo/` і зберігає відповідь у файл `analyze_result.md` з timestamp. Запускається командою `python3 analyze.py`.
+
+`analyze_result.md` приклад виводу скрипта analyze.py. Це фактичний результат аналізу коду todo/, згенерований Claude через SDK. Додано в репо як демонстрація того що скрипт реально працює.
+
 
 `.mcp.json` конфіг для підключення filesystem MCP сервера, який додає Claude можливість працювати з файлами через стандартизований Model Context Protocol.
 
@@ -36,6 +39,8 @@ python3 -m todo done 1
 Папка з конфігами Claude Code для цього проєкту.
 
 `settings.json` містить 5 активних хуків. `SessionStart`, `UserPromptSubmit`, `SessionEnd` працюють разом і записують усі мої промпти до Claude Code у файл `prompts.md`. `PostToolUse` логує кожне редагування файла у `edits.md`. `PreToolUse` блокує доступ до `.env` файлів через matcher Read|Grep і Bash, повертаючи exit code 2 з повідомленням про блокування.
+
+`edits.md` журнал редагувань файлів, який автоматично заповнюється хуком PostToolUse. Кожен раз коли Claude редагує файл, у журнал дописується рядок з timestamp і шляхом до файла.
 
 `commands/` містить три кастомні слеш-команди для Claude Code. Це markdown файли, де ім'я файла стає командою, а вміст це промпт який Claude виконує. `/run` запускає `python3 -m todo list`, `/add-task` додає задачу з high пріоритетом, `/done-task` позначає виконаною.
 
