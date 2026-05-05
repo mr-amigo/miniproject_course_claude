@@ -227,3 +227,6 @@ __marimo__/
 
 # Local data file written by the todo CLI playground
 tasks.json
+
+# Output of analyze.py (calls claude -p, regenerated locally)
+analyze_result.md
