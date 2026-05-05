@@ -219,11 +219,5 @@ __marimo__/
 
 .DS_Store
 
-# Local edit log written by the PostToolUse hook
-.claude/edits.md
-
 # Local data file written by the todo CLI playground
 tasks.json
-
-# Output of analyze.py (calls claude -p, regenerated locally)
-analyze_result.md

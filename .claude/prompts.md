@@ -306,3 +306,7 @@
 ### 00:10:50
 
 > прибери .claude/prompts.md з .gitignore. закоміть і запуш
+### 00:18:09
+
+> також прибери з gitignore edits.md analyze_result.md. відповідно в prompts зявиться новий запис - тому і це теж закоміть і запуш
+
